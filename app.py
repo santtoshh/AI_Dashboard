@@ -174,9 +174,25 @@ if show_overview:
         # Correlation
         st.subheader("Return Correlation")
         corr = df_norm.pct_change().corr()
-        fig_corr = px.imshow(corr, text_auto=True, color_continuous_scale='RdBu_r', title="Correlation Matrix", height=300)
-        fig_corr.update_layout(template='plotly_dark')
-        st.plotly_chart(fig_corr, use_container_width=True, key="overview_corr")
+# mask out the upper triangle
+mask = np.triu_indices_from(corr, k=1)
+corr_masked = corr.copy()
+corr_masked.values[mask] = np.nan
+
+fig_corr = px.imshow(
+    corr_masked,
+    text_auto='.2f',
+    color_continuous_scale='RdBu_r',
+    zmin=-1, zmax=1,
+    title="Return Correlation",
+    height=300
+    
+)
+fig_corr.update_traces(
+    hovertemplate='x: %{x}<br>y: %{y}<br>corr: %{z:.2f}<extra></extra>'
+)
+fig_corr.update_layout(template='plotly_dark', xaxis_side='bottom')
+st.plotly_chart(fig_corr, use_container_width=True, key="overview_corr")
 
 # Per-stock tabs
 for idx, tkr in enumerate(tickers):
