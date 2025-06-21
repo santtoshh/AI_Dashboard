@@ -14,16 +14,17 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from collections import Counter
 
 # Load environment variables
-env_path = Path(__file__).parent / '.env'
-load_dotenv(dotenv_path=env_path)
 
-# API keys and clients
-API_KEY = os.getenv("OPENAI_API_KEY")
-NEWS_API_KEY = os.getenv("NEWS_API_KEY")
-if not API_KEY or not NEWS_API_KEY:
+if "GITHUB_ACTIONS" not in os.environ:  # or check os.getenv('STREAMLIT_CLOUD')
+    from dotenv import load_dotenv
+    load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+NEWS_API_KEY   = os.getenv("NEWS_API_KEY")
+if not OPENAI_API_KEY or not NEWS_API_KEY:
     st.error("Missing API keys. Please set OPENAI_API_KEY and NEWS_API_KEY in your .env file.")
     st.stop()
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY)
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 analyzer = SentimentIntensityAnalyzer()
 
