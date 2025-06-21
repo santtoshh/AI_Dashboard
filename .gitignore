@@ -2,5 +2,8 @@ __pycache__/
 *.py[cod]
 .env
 .venv/
-.streamlit/
 .DS_Store
+# ignore everything in .streamlit
+.streamlit/*
+# …except our config.toml
+!.streamlit/config.toml
