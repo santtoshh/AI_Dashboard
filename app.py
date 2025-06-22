@@ -257,23 +257,7 @@ for idx, tkr in enumerate(tickers):
                     pass
         fig.update_layout(title="Price & Indicators", height=400, template='plotly_dark')
         st.plotly_chart(fig, use_container_width=True, key=f"price_{tkr}")
-        fig = go.Figure()
-        fig.add_trace(go.Candlestick(
-            x=df.index, open=df['Open'], high=df['High'], low=df['Low'], close=df['Close'], name='Price'
-        ))
-        fig.add_trace(go.Scatter(x=df.index, y=df['Fast_MA'], name=f"MA{short_ma}"))
-        fig.add_trace(go.Scatter(x=df.index, y=df['Slow_MA'], name=f"MA{long_ma}"))
-        fig.add_trace(go.Scatter(x=df.index, y=df['BB_UP'], name='BB Upper', line=dict(dash='dash')))
-        fig.add_trace(go.Scatter(x=df.index, y=df['BB_LOW'], name='BB Lower', line=dict(dash='dash')))
-        ed = info.get('earningsDate')
-        if isinstance(ed, (list, tuple)):
-            for e in ed:
-                try:
-                    dt = pd.to_datetime(e).normalize()
-                    fig.add_vline(x=dt, line_dash='dot', annotation_text='Earnings', annotation_position='top')
-                except: pass
-        fig.update_layout(title="Price & Indicators", height=400, template='plotly_dark')
-        st.plotly_chart(fig, use_container_width=True)
+        
         # Volume & OBV
         fig2 = go.Figure()
         fig2.add_trace(go.Bar(x=df.index, y=df['Volume'], name='Volume'))
